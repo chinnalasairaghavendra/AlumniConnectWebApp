@@ -1,178 +1,211 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import AlumniCard from '../components/network/AlumniCard';
-import ConnectionCard from '../components/network/ConnectionCard';
-import Button from '../components/common/Button';
-import DemoBadge from '../components/common/DemoBadge';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import AlumniCard from "../components/network/AlumniCard";
+import ConnectionCard from "../components/network/ConnectionCard";
+import Button from "../components/common/Button";
+import DemoBadge from "../components/common/DemoBadge";
 import {
   MagnifyingGlassIcon,
   UserPlusIcon,
   AcademicCapIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 const Network = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('discover');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [filterDepartment, setFilterDepartment] = useState('all');
+  const [activeTab, setActiveTab] = useState("discover");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [filterDepartment, setFilterDepartment] = useState("all");
+  const [searchResults,setSearchResults]=useState([]);
 
+  // useEffect(async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const response = await fetch(
+  //       `http://localhost:5000/api/user/all`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+  //     const data = await response.json();
+  //     setSearchResults(data);
+  //   } catch (error) {
+  //     console.error("Search error:", error);
+  //   }
+  // }, [activeTab]);
   // Mock alumni data with enhanced fields
   const mockAlumni = [
     {
       id: 1,
-      name: 'Priya Sharma',
-      role: 'alumni',
-      batch: '2018-22',
-      department: 'Computer Science',
-      currentPosition: 'Software Engineer at Google',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b6d6b3b0?w=150',
-      location: 'Bangalore, India',
+      name: "Priya Sharma",
+      role: "alumni",
+      batch: "2018-22",
+      department: "Computer Science",
+      currentPosition: "Software Engineer at Google",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108755-2616b6d6b3b0?w=150",
+      location: "Bangalore, India",
       connections: 245,
       isConnected: false,
       isOnline: true,
-      bio: 'Passionate about technology and helping students navigate their career journey.',
-      skills: ['JavaScript', 'React', 'Machine Learning', 'Python'],
+      bio: "Passionate about technology and helping students navigate their career journey.",
+      skills: ["JavaScript", "React", "Machine Learning", "Python"],
       mutualConnections: 5,
       lastActivity: {
-        type: 'post',
-        timestamp: '2025-09-17T10:30:00Z'
-      }
+        type: "post",
+        timestamp: "2025-09-17T10:30:00Z",
+      },
     },
     {
       id: 2,
-      name: 'Rahul Kumar',
-      role: 'alumni',
-      batch: '2016-20',
-      department: 'Mechanical Engineering',
-      currentPosition: 'Senior Design Engineer at Tesla',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-      location: 'San Francisco, USA',
+      name: "Rahul Kumar",
+      role: "alumni",
+      batch: "2016-20",
+      department: "Mechanical Engineering",
+      currentPosition: "Senior Design Engineer at Tesla",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+      location: "San Francisco, USA",
       connections: 189,
       isConnected: true,
       isOnline: false,
-      bio: 'Automotive enthusiast working on sustainable transportation solutions.',
-      skills: ['CAD Design', 'Battery Technology', 'Project Management'],
+      bio: "Automotive enthusiast working on sustainable transportation solutions.",
+      skills: ["CAD Design", "Battery Technology", "Project Management"],
       mutualConnections: 8,
       lastActivity: {
-        type: 'comment',
-        timestamp: '2025-09-16T14:20:00Z'
-      }
+        type: "comment",
+        timestamp: "2025-09-16T14:20:00Z",
+      },
     },
     {
       id: 3,
-      name: 'Ananya Patel',
-      role: 'student',
-      batch: '2022-26',
-      department: 'Computer Science',
-      currentPosition: 'Final Year Student',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
-      location: 'Mumbai, India',
+      name: "Ananya Patel",
+      role: "student",
+      batch: "2022-26",
+      department: "Computer Science",
+      currentPosition: "Final Year Student",
+      avatar:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150",
+      location: "Mumbai, India",
       connections: 87,
       isConnected: false,
       isOnline: true,
-      bio: 'Final year CS student interested in AI/ML and software development.',
-      skills: ['Python', 'Data Science', 'Machine Learning'],
+      bio: "Final year CS student interested in AI/ML and software development.",
+      skills: ["Python", "Data Science", "Machine Learning"],
       mutualConnections: 12,
       lastActivity: {
-        type: 'login',
-        timestamp: '2025-09-17T16:45:00Z'
-      }
+        type: "login",
+        timestamp: "2025-09-17T16:45:00Z",
+      },
     },
     {
       id: 4,
-      name: 'Vikram Singh',
-      role: 'alumni',
-      batch: '2015-19',
-      department: 'Business Administration',
-      currentPosition: 'Product Manager at Microsoft',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
-      location: 'Seattle, USA',
+      name: "Vikram Singh",
+      role: "alumni",
+      batch: "2015-19",
+      department: "Business Administration",
+      currentPosition: "Product Manager at Microsoft",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
+      location: "Seattle, USA",
       connections: 312,
       isConnected: false,
       isOnline: true,
-      bio: 'Product management professional with expertise in enterprise software.',
-      skills: ['Product Strategy', 'Data Analysis', 'Leadership'],
+      bio: "Product management professional with expertise in enterprise software.",
+      skills: ["Product Strategy", "Data Analysis", "Leadership"],
       mutualConnections: 3,
       lastActivity: {
-        type: 'post',
-        timestamp: '2025-09-16T09:15:00Z'
-      }
+        type: "post",
+        timestamp: "2025-09-16T09:15:00Z",
+      },
     },
     {
       id: 5,
-      name: 'Sneha Gupta',
-      role: 'student',
-      batch: '2023-27',
-      department: 'Electrical Engineering',
-      currentPosition: 'Second Year Student',
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
-      location: 'Delhi, India',
+      name: "Sneha Gupta",
+      role: "student",
+      batch: "2023-27",
+      department: "Electrical Engineering",
+      currentPosition: "Second Year Student",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150",
+      location: "Delhi, India",
       connections: 45,
       isConnected: true,
       isOnline: false,
-      bio: 'Second year EE student passionate about renewable energy and power systems.',
-      skills: ['Circuit Design', 'Power Systems', 'Arduino'],
+      bio: "Second year EE student passionate about renewable energy and power systems.",
+      skills: ["Circuit Design", "Power Systems", "Arduino"],
       mutualConnections: 7,
       lastActivity: {
-        type: 'comment',
-        timestamp: '2025-09-15T11:30:00Z'
-      }
-    }
+        type: "comment",
+        timestamp: "2025-09-15T11:30:00Z",
+      },
+    },
   ];
 
   const [people, setPeople] = useState(mockAlumni);
 
   const handleConnect = async (userId) => {
     // Simulate API call
-    console.log('Connecting to user:', userId);
-    setPeople(people.map(person =>
-      person.id === userId
-        ? { ...person, isConnected: !person.isConnected }
-        : person
-    ));
+    console.log("Connecting to user:", userId);
+    setPeople(
+      people.map((person) =>
+        person.id === userId
+          ? { ...person, isConnected: !person.isConnected }
+          : person,
+      ),
+    );
   };
 
   const handleDisconnect = async (userId) => {
     // Simulate API call
-    console.log('Disconnecting from user:', userId);
-    setPeople(people.map(person =>
-      person.id === userId
-        ? { ...person, isConnected: false }
-        : person
-    ));
+    console.log("Disconnecting from user:", userId);
+    setPeople(
+      people.map((person) =>
+        person.id === userId ? { ...person, isConnected: false } : person,
+      ),
+    );
   };
 
   const handleMessage = (userId) => {
-    console.log('Starting conversation with user:', userId);
-    navigate('/messages');
+    console.log("Starting conversation with user:", userId);
+    navigate("/messages");
   };
 
   const handleViewProfile = (userId) => {
     navigate(`/profile/${userId}`);
   };
 
-  const departments = ['Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Business Administration'];
+  const departments = [
+    "Computer Science",
+    "Mechanical Engineering",
+    "Electrical Engineering",
+    "Business Administration",
+  ];
 
-  const filteredPeople = people.filter(person => {
-    const matchesSearch = person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         person.currentPosition.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         person.bio.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesRole = filterRole === 'all' || person.role === filterRole;
-    const matchesDepartment = filterDepartment === 'all' || person.department === filterDepartment;
-    
+  const filteredPeople = people.filter((person) => {
+    const matchesSearch =
+      person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      person.currentPosition
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      person.bio.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = filterRole === "all" || person.role === filterRole;
+    const matchesDepartment =
+      filterDepartment === "all" || person.department === filterDepartment;
+
     return matchesSearch && matchesRole && matchesDepartment;
   });
 
-  const discoverPeople = filteredPeople.filter(p => !p.isConnected);
-  const connectedPeople = filteredPeople.filter(p => p.isConnected);
+  const discoverPeople = filteredPeople.filter((p) => !p.isConnected);
+  const connectedPeople = filteredPeople.filter((p) => p.isConnected);
 
   const tabs = [
-    { id: 'discover', name: 'Discover People', count: discoverPeople.length },
-    { id: 'connections', name: 'My Connections', count: connectedPeople.length },
-    { id: 'requests', name: 'Requests', count: 3 },
-    { id: 'suggestions', name: 'Suggestions', count: 8 },
+    { id: "discover", name: "Discover People", count: discoverPeople.length },
+    { id: "followers", name: "Followers", count: connectedPeople.length },
+    { id: "following", name: "Following", count: connectedPeople.length },
+    { id: "requests", name: "Requests", count: 3 },
   ];
 
   return (
@@ -187,11 +220,15 @@ const Network = () => {
           <h1 className="text-3xl font-bold text-gray-900">Network</h1>
           <DemoBadge label="Static demo" />
         </div>
-        <p className="text-gray-600">Connect with alumni and fellow students to expand your professional network (directory is demo data — the backend has follow/unfollow but no user-listing endpoint yet)</p>
+        <p className="text-gray-600">
+          Connect with alumni and fellow students to expand your professional
+          network (directory is demo data — the backend has follow/unfollow but
+          no user-listing endpoint yet)
+        </p>
       </motion.div>
 
       {/* Stats Cards */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -221,9 +258,9 @@ const Network = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center">
             <div className="p-3 bg-purple-100 rounded-full">
               <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,7 +275,7 @@ const Network = () => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Search and Filters */}
       <motion.div
@@ -278,8 +315,10 @@ const Network = () => {
             className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">All Departments</option>
-            {departments.map(dept => (
-              <option key={dept} value={dept}>{dept}</option>
+            {departments.map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
             ))}
           </select>
         </div>
@@ -300,14 +339,16 @@ const Network = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
                 {tab.name}
-                <span className="ml-2 py-0.5 px-2 bg-gray-100 text-gray-600 rounded-full text-xs">
-                  {tab.count}
-                </span>
+                {tab.name === "Requests" && (
+                  <span className="ml-2 py-0.5 px-2 bg-gray-100 text-gray-600 rounded-full text-xs">
+                    {tab.count}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -315,7 +356,7 @@ const Network = () => {
 
         {/* Tab Content */}
         <div className="p-6">
-          {activeTab === 'discover' && (
+          {activeTab === "discover" && (
             <div>
               {discoverPeople.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -339,14 +380,18 @@ const Network = () => {
               ) : (
                 <div className="text-center py-12">
                   <UserPlusIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No people found</h3>
-                  <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No people found
+                  </h3>
+                  <p className="text-gray-500">
+                    Try adjusting your search or filter criteria
+                  </p>
                 </div>
               )}
             </div>
           )}
 
-          {activeTab === 'connections' && (
+          {activeTab === "following" && (
             <div>
               {connectedPeople.length > 0 ? (
                 <div className="space-y-4">
@@ -371,9 +416,53 @@ const Network = () => {
               ) : (
                 <div className="text-center py-12">
                   <UserPlusIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No connections yet</h3>
-                  <p className="text-gray-500 mb-4">Start building your network by connecting with alumni and students</p>
-                  <Button onClick={() => setActiveTab('discover')}>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No connections yet
+                  </h3>
+                  <p className="text-gray-500 mb-4">
+                    Start building your network by connecting with alumni and
+                    students
+                  </p>
+                  <Button onClick={() => setActiveTab("discover")}>
+                    Discover People
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+          {activeTab === "following" && (
+            <div>
+              {connectedPeople.length > 0 ? (
+                <div className="space-y-4">
+                  {connectedPeople.map((person, index) => (
+                    <motion.div
+                      key={person.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <ConnectionCard
+                        connection={person}
+                        onMessage={handleMessage}
+                        onDisconnect={handleDisconnect}
+                        onViewProfile={handleViewProfile}
+                        layout="horizontal"
+                        showLastActivity={true}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <UserPlusIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No connections yet
+                  </h3>
+                  <p className="text-gray-500 mb-4">
+                    Start building your network by connecting with alumni and
+                    students
+                  </p>
+                  <Button onClick={() => setActiveTab("discover")}>
                     Discover People
                   </Button>
                 </div>
@@ -381,25 +470,17 @@ const Network = () => {
             </div>
           )}
 
-          {activeTab === 'requests' && (
+          {activeTab === "requests" && (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserPlusIcon className="h-8 w-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No pending requests</h3>
-              <p className="text-gray-500">Connection requests will appear here when you receive them</p>
-            </div>
-          )}
-
-          {activeTab === 'suggestions' && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Smart Suggestions Coming Soon</h3>
-              <p className="text-gray-500">We'll suggest people you might know based on your interests and connections</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No pending requests
+              </h3>
+              <p className="text-gray-500">
+                Connection requests will appear here when you receive them
+              </p>
             </div>
           )}
         </div>
