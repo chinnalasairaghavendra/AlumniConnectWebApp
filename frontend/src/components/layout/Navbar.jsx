@@ -33,7 +33,7 @@ const Navbar = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(()=>{
-    if(!searchQuery.trim())
+    if(!searchQuery.trim()||searchQuery.length<2)
     {
       setSearchResults([]);
       return;
@@ -85,7 +85,7 @@ const Navbar = () => {
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
 
-    if (!searchQuery.trim()) {
+    if (!searchQuery.trim()||searchQuery.length<2) {
         setSearchResults([]);
         return;
     }
@@ -145,7 +145,7 @@ const Navbar = () => {
 
               <input
                 type="text"
-                placeholder="Search alumni, students, posts..."
+                placeholder="Search alumni, students"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -185,10 +185,6 @@ const Navbar = () => {
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {user.name}
-                      </p>
-
-                      <p className="text-xs text-gray-500 truncate">
-                        {user.email}
                       </p>
                     </div>
 

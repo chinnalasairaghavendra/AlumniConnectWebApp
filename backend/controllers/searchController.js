@@ -16,7 +16,7 @@ export const globalSearch= async(req,res)=>{
                 {name:{ $regex:searchTerm,$options:"i"}},
                 {email:{ $regex:searchTerm,$options:"i"}}
             ]
-        });
+        }).limit(4);
         res.status(200).json(users);
     }
     catch(error){
